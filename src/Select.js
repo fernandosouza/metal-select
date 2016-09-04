@@ -145,6 +145,16 @@ class Select extends Component {
 		return items.map((item) => Soy.toIncDom(item));
 	}
 
+	/**
+	 * Detect changes from the disable attribute.
+	 * @param {string} newValue
+	 */
+	syncDisabled(newValue) {
+		if (newValue) {
+			this.getDropdown().expanded = false;
+		}
+	}
+
 }
 Soy.register(Select, templates);
 
@@ -188,7 +198,12 @@ Select.STATE = {
 	 * @type {boolean}
 	 */
 	expanded_: {
-		validator: core.isBoolean,
+		setter: function(value) {
+			return !this.disabled ? value : false;
+		},
+		validator: function() {
+			return core.isBoolean;
+		},
 		value: false,
 		internal: true
 	},
