@@ -174,6 +174,16 @@ Select.STATE = {
 	},
 
 	/**
+	 * Block or unblock the component behaviours.
+	 * @type {?boolean}
+	 * @default false
+	 */
+	disabled: {
+		validator: core.isBoolean,
+		value: false
+	},
+
+	/**
 	 * Flag indicating if the select dropdown is currently expanded.
 	 * @type {boolean}
 	 */
