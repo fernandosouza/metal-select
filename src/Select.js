@@ -95,6 +95,22 @@ class Select extends Component {
 		}
 	}
 
+	getNextElegibleIndex_(index) {
+
+	}
+
+	getPreviousEnabledIndex_(index) {
+		if (!this.isTheOptionDisabled(index)) {
+			return index;
+		}
+		
+		return this.getPreviousEnabledIndex_(index - 1);
+	}
+
+	isTheOptionDisabled(index) {
+		return (this.disabledOptions.indexOf(indexOf.toString()) > -1);
+	}
+
 	/**
 	 * Handles a `keydown` event on this component. Handles keyboard controls.
 	 * @param {!Event} event
@@ -194,6 +210,16 @@ Select.STATE = {
 	},
 
 	/**
+	 * Block or unblock the component behaviours.
+	 * @type {?boolean}
+	 * @default false
+	 */
+	disabledOptions: {
+		validator: val => val instanceof Array,
+		value: []
+	},
+
+	/**
 	 * Flag indicating if the select dropdown is currently expanded.
 	 * @type {boolean}
 	 */
@@ -246,6 +272,13 @@ Select.STATE = {
 		validator: core.isNumber,
 		valueFn: function() {
 			return this.label || !this.items.length ? -1 : 0;
+		},
+		setter: function(newValue, oldValue) {
+			if (this.disabledOptions.indexOf(newValue.toString()) < 0 ) {
+				return newValue;
+			}
+
+			return oldValue;
 		}
 	},
 

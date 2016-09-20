@@ -3,6 +3,7 @@
 /**
  * @param? arrowClass
  * @param? disabled
+ * @param? disabledOptions
  * @param? buttonClass
  * @param? elementClasses
  * @param? expanded_
@@ -16,9 +17,10 @@
  */
 {template .render}
 	{@param? label: html|string}
-	<div class="select{$elementClasses ? ' ' + $elementClasses : ''}" data-onkeydown="handleKeyDown_">
+	<div class="select{$elementClasses ? ' ' + $elementClasses : ''}" data-onkeydown="handleKeyDown_" role="listbox">
 		{let $currSelectedIndex: isNonnull($selectedIndex) ? $selectedIndex : ($label or (length($items) == 0) ? -1 : 0) /}
 		<input
+			aria-disabled="{$disabled}"
 			disabled="{$disabled}"
 			type="hidden"
 			name="{$hiddenInputName ? $hiddenInputName : ''}"
@@ -28,10 +30,15 @@
 			{param body kind="html"}
 				{foreach $item in $items}
 					<li
+						aria-disabled="{$disabledOptions and $disabledOptions[index($item)] and $disabledOptions[index($item)] == index($item) ? 'true' : 'false'}"
 						data-onclick="{$handleItemClick_ ?: ''}"
 						data-onkeydown="{$handleItemKeyDown_ ?: ''}"
-						class="select-option{$currSelectedIndex == index($item) ? ' selected' : ''}">
-						<a href="javascript:;">{$item}</a>
+						class="{$disabledOptions and $disabledOptions[index($item)] and $disabledOptions[index($item)] == index($item) ? 'disabled ' : ''} select-option{$currSelectedIndex == index($item) ? ' selected' : ''}"
+						role="option">
+						<a
+							aria-disabled="{$disabledOptions and $disabledOptions[index($item)] and $disabledOptions[index($item)] == index($item) ? 'true' : 'false'}"
+							href="javascript:;"
+							tabindex="{$disabledOptions and $disabledOptions[index($item)] and $disabledOptions[index($item)] == index($item) ? '-1' : '0'}">{$item}</a>
 					</li>
 				{/foreach}
 			{/param}
